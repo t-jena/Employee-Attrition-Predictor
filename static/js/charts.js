@@ -1,5 +1,3 @@
-// Retain — home page dataset upload & attrition charts
-
 const CHART_PALETTE = {
   sky: "#3aa6e0",
   skyLight: "#7cd3f2",
