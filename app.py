@@ -1,17 +1,6 @@
 """
 Attrition Assessment — Flask backend.
 
-Two independent features:
-
-1. Assessment page (/assessment): takes a single employee's attributes from
-   a form and scores them with your trained logistic regression model.
-   Drop your pickled model into model/attrition_model.pkl (see FEATURE_FIELDS
-   below for the expected inputs, and model/scaler.pkl if you scaled your
-   training data separately).
-
-2. Home page (/): shows attrition charts built from a CSV file that lives
-   in the app itself, at data/attrition_data.csv. Replace that file with
-   your own dataset and the charts update automatically — no upload step.
 """
 
 import os
@@ -23,28 +12,10 @@ from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 
-# ---------------------------------------------------------------------------
 # Model loading
-# ---------------------------------------------------------------------------
-# If your model was trained on scaled data and the scaler is NOT already
-# baked into a Pipeline, save the fitted scaler separately as model/scaler.pkl
-# and it will be applied automatically before every prediction:
-#
-#   import pickle
-#   with open("model/scaler.pkl", "wb") as f:
-#       pickle.dump(your_fitted_scaler, f)
-#
-# If your model IS a Pipeline that already includes scaling, leave
-# model/scaler.pkl absent — raw inputs will be passed straight through.
 
 model = pickle.load(open("model/attrition_model.pkl", "rb"))
 
-# ---------------------------------------------------------------------------
-# Feature schema — matches the employee_data.csv columns (excluding the
-# Attrition target). Order doesn't matter here since features are passed to
-# the model as a named pandas DataFrame, not a positional array — your
-# pipeline's ColumnTransformer/preprocessing matches by column name.
-# ---------------------------------------------------------------------------
 TRAINING_COLUMNS=[
     'Age', 
     'DistanceFromHome', 
@@ -122,7 +93,7 @@ CATEGORICAL_FIELDS = [
 
 FEATURE_FIELDS = NUMERIC_FIELDS + CATEGORICAL_FIELDS
 
-# Dropdown choices for the assessment form, drawn from employee_data.csv
+# Dropdown choices for the assessment form
 CATEGORICAL_CHOICES = {
     "BusinessTravel": ["Non-Travel", "Travel_Rarely", "Travel_Frequently"],
     "Department": ["Human Resources", "Research & Development", "Sales"],
@@ -163,18 +134,8 @@ def build_feature_dataframe(payload):
             row[col] = 1
 
     features = pd.DataFrame([row])
-
     return features
 
-
-# ---------------------------------------------------------------------------
-# Dataset → chart helpers (home page)
-# ---------------------------------------------------------------------------
-# These look for common HR-attrition-style column names but are forgiving:
-# matching is case-insensitive and any chart whose required column is
-# missing is simply skipped (the front end hides that card).
-
-# candidate column names -> canonical key, checked case-insensitively
 COLUMN_CANDIDATES = {
     "attrition": ["attrition", "left", "churn", "target", "exited"],
     "department": ["department", "dept", "team"],
@@ -186,7 +147,6 @@ COLUMN_CANDIDATES = {
     "gender": ["gender", "sex"],
 }
 
-
 def find_column(df: pd.DataFrame, candidates: list) -> str | None:
     lower_map = {c.lower().replace(" ", "").replace("-", "_"): c for c in df.columns}
     for cand in candidates:
@@ -194,7 +154,6 @@ def find_column(df: pd.DataFrame, candidates: list) -> str | None:
         if key in lower_map:
             return lower_map[key]
     return None
-
 
 def to_binary_attrition(series: pd.Series) -> pd.Series:
     """Normalize a variety of attrition encodings to 0/1."""
@@ -206,10 +165,8 @@ def to_binary_attrition(series: pd.Series) -> pd.Series:
     })
     return mapped.fillna(0).astype(int)
 
-
 def bucket_series(series: pd.Series, bins: list, labels: list) -> pd.Series:
     return pd.cut(series, bins=bins, labels=labels, right=False, include_lowest=True)
-
 
 def build_charts_from_dataframe(df: pd.DataFrame) -> dict:
     df = df.copy()
@@ -315,10 +272,8 @@ def build_charts_from_dataframe(df: pd.DataFrame) -> dict:
     charts["detected_columns"] = {k: v for k, v in cols.items() if v}
     return charts
 
-
-# ---------------------------------------------------------------------------
 # Routes — pages
-# ---------------------------------------------------------------------------
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -332,10 +287,7 @@ def assessment():
         categorical_choices=CATEGORICAL_CHOICES,
     )
 
-
-# ---------------------------------------------------------------------------
 # Routes — API
-# ---------------------------------------------------------------------------
 
 def risk_bucket(probability):
     if probability < 0.33:
@@ -356,7 +308,6 @@ def predict():
         return jsonify({"error": str(exc)}), 400
 
     try:
-    # Ensure the columns match those used during training
         for col in TRAINING_COLUMNS:
             if col not in features.columns:
                 features[col] = 0
@@ -385,7 +336,6 @@ def predict():
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), "data", "attrition_data.csv")
 
-
 @app.route("/api/charts")
 def get_charts():
     if not os.path.exists(DATA_PATH):
@@ -407,11 +357,10 @@ def get_charts():
         charts = build_charts_from_dataframe(df)
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
-    except Exception as exc:  # pragma: no cover - defensive
+    except Exception as exc:  
         return jsonify({"error": f"Could not process this dataset: {exc}"}), 500
 
     return jsonify(charts)
-
 
 @app.route("/api/health")
 def health():
@@ -419,7 +368,6 @@ def health():
         "model_loaded": model is not None,
         "message": "model is none" if model is None else "Model ready.",
     })
-
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
