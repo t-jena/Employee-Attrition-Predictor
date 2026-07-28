@@ -97,7 +97,4 @@ Employee-Attrition-Prediction/
 ### Random Forest Metrics
 
 - Accuracy: **84.01%**
-- Precision: **0.50**
-- Recall: **0.57**
-- F1-Score: **0.53**
 - ROC-AUC Score: **0.811**
