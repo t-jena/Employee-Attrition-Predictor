@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attrition Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <div class="aero-bg">
+    <span class="bubble b1"></span>
+    <span class="bubble b2"></span>
+    <span class="bubble b3"></span>
+    <span class="bubble b4"></span>
+    <span class="bubble b5"></span>
+  </div>
+
+  <header class="navbar">
+    <div class="navbar__inner">
+      <a href="{{ url_for('home') }}" class="brand">
+        <span class="brand__orb"></span>
+        <span class="brand__text">Attrition Console</span>
+      </a>
+      <nav class="navbar__links">
+        <a href="{{ url_for('home') }}" class="active">Overview</a>
+        <a href="{{ url_for('assessment') }}">Run Assessment</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero__content">
+        <p class="eyebrow">Workforce Analytics</p>
+        <h1>Know who's at risk<br>of leaving before they do.</h1>
+        <p class="hero__sub">
+          Enter an employee's profile and check scores of their attrition risk. The charts below track general attrition
+          patterns.
+        </p>
+        <div class="hero__cta">
+          <a href="{{ url_for('assessment') }}" class="btn btn--primary">Assess an employee</a>
+          <a href="#charts" class="btn btn--ghost">View attrition charts</a>
+        </div>
+      </div>
+
+      <div class="hero__visual" aria-hidden="true">
+        <div class="gauge-orb">
+          <svg viewBox="0 0 240 240" class="gauge-orb__ring">
+            <circle cx="120" cy="120" r="100" class="gauge-orb__track"></circle>
+            <circle cx="120" cy="120" r="100" class="gauge-orb__progress"></circle>
+          </svg>
+          <div class="gauge-orb__core">
+            <span class="gauge-orb__pct">27%</span>
+            <span class="gauge-orb__label">Risk</span>
+          </div>
+          <div class="gauge-orb__sheen"></div>
+        </div>
+        <div class="floating-card card--1">
+          <span class="dot dot--low"></span> Low risk · Job satisfaction high
+        </div>
+        <div class="floating-card card--2">
+          <span class="dot dot--high"></span> High risk · Overtime flagged
+        </div>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="band__stat">
+        <span class="band__num">01</span>
+        <p>Fill in an employee's profile on the assessment page.</p>
+      </div>
+      <div class="band__stat">
+        <span class="band__num">02</span>
+        <p>Check Attrition scores instantly.</p>
+      </div>
+      <div class="band__stat">
+        <span class="band__num">03</span>
+        <p>Track wider attrition trends in the charts below.</p>
+      </div>
+    </section>
+    
+    <section class="charts-section" id="charts">
+
+      <div class="charts-empty" id="charts-empty">
+      </div>
+
+      <div class="charts-section__intro">
+        <p class="eyebrow">Attrition charts</p>
+        <h2>See where attrition is concentrated</h2>
+      </div>
+
+      <div class="charts-grid" id="charts-grid" hidden>
+
+        <div class="glass-card chart-card chart-card--summary" id="card-summary">
+          <h3>Snapshot</h3>
+          <div class="summary-stats">
+            <div class="summary-stat">
+              <span class="summary-stat__num" id="stat-total">--</span>
+              <span class="summary-stat__label">Employees</span>
+            </div>
+            <div class="summary-stat">
+              <span class="summary-stat__num" id="stat-left">--</span>
+              <span class="summary-stat__label">Left</span>
+            </div>
+            <div class="summary-stat">
+              <span class="summary-stat__num" id="stat-rate">--%</span>
+              <span class="summary-stat__label">Attrition Rate</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card chart-card" id="card-overall">
+          <h3>Overall Attrition</h3>
+          <canvas id="chart-overall"></canvas>
+        </div>
+
+        <div class="glass-card chart-card" id="card-department">
+          <h3>By Department</h3>
+          <canvas id="chart-department"></canvas>
+        </div>
+
+        <div class="glass-card chart-card" id="card-overtime">
+          <h3>By Overtime Status</h3>
+          <canvas id="chart-overtime"></canvas>
+        </div>
+
+        <div class="glass-card chart-card" id="card-age">
+          <h3>By Age Group</h3>
+          <canvas id="chart-age"></canvas>
+        </div>
+
+        <div class="glass-card chart-card" id="card-job_satisfaction">
+          <h3>By Job Satisfaction</h3>
+          <canvas id="chart-job_satisfaction"></canvas>
+        </div>
+
+        <div class="glass-card chart-card" id="card-tenure">
+          <h3>By Years at Company</h3>
+          <canvas id="chart-tenure"></canvas>
+        </div>
+
+      </div>
+
+      <p class="charts-warnings" id="charts-warnings"></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Internal workforce analytics tool · For HR decision support, not sole determination.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+
+</body>
+</html>

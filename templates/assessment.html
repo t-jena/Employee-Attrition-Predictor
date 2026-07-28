@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Run Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <div class="aero-bg">
+    <span class="bubble b1"></span>
+    <span class="bubble b2"></span>
+    <span class="bubble b3"></span>
+  </div>
+
+  <header class="navbar">
+    <div class="navbar__inner">
+      <a href="{{ url_for('home') }}" class="brand">
+        <span class="brand__orb"></span>
+        <span class="brand__text">Attrition Console</span>
+      </a>
+      <nav class="navbar__links">
+        <a href="{{ url_for('home') }}">Overview</a>
+        <a href="{{ url_for('assessment') }}" class="active">Run Assessment</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="assess">
+    <section class="assess__intro">
+      <p class="eyebrow">Employee profile</p>
+      <h1>Run an attrition assessment</h1>
+      <p class="assess__sub">Enter the employee's current attributes below.</p>
+    </section>
+
+    <div class="assess__layout">
+
+      <form id="assessment-form" class="glass-panel" autocomplete="off">
+
+        <fieldset>
+          <legend>Profile basics</legend>
+          <div class="field-grid">
+            <div class="field">
+              <label for="Age">Age</label>
+              <input type="number" id="Age" name="Age" min="18" max="75" required>
+            </div>
+            <div class="field">
+              <label for="Gender">Gender</label>
+              <select id="Gender" name="Gender" required>
+                <option value="" disabled selected>Select</option>
+                {% for choice in categorical_choices['Gender'] %}
+                <option value="{{ choice }}">{{ choice }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field">
+              <label for="MaritalStatus">Marital status</label>
+              <select id="MaritalStatus" name="MaritalStatus" required>
+                <option value="" disabled selected>Select</option>
+                {% for choice in categorical_choices['MaritalStatus'] %}
+                <option value="{{ choice }}">{{ choice }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field">
+              <label for="EducationField">Education field</label>
+              <select id="EducationField" name="EducationField" required>
+                <option value="" disabled selected>Select</option>
+                {% for choice in categorical_choices['EducationField'] %}
+                <option value="{{ choice }}">{{ choice }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Job details</legend>
+          <div class="field-grid">
+            <div class="field">
+              <label for="Department">Department</label>
+              <select id="Department" name="Department" required>
+                <option value="" disabled selected>Select</option>
+                {% for choice in categorical_choices['Department'] %}
+                <option value="{{ choice }}">{{ choice }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field">
+              <label for="JobRole">Job role</label>
+              <select id="JobRole" name="JobRole" required>
+                <option value="" disabled selected>Select</option>
+                {% for choice in categorical_choices['JobRole'] %}
+                <option value="{{ choice }}">{{ choice }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field">
+              <label for="JobLevel">Job level</label>
+              <select id="JobLevel" name="JobLevel" required>
+                <option value="" disabled selected>Select a level</option>
+                <option value="1">1 — Entry</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5 — Executive</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="BusinessTravel">Business travel</label>
+              <select id="BusinessTravel" name="BusinessTravel" required>
+                <option value="" disabled selected>Select</option>
+                {% for choice in categorical_choices['BusinessTravel'] %}
+                <option value="{{ choice }}">{{ choice }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field">
+              <label for="DistanceFromHome">Distance from home (km)</label>
+              <input type="number" id="DistanceFromHome" name="DistanceFromHome" min="0" step="1" required>
+            </div>
+            <div class="field field--toggle">
+              <label for="OverTime">Regularly works overtime</label>
+              <div class="toggle">
+                <input type="checkbox" id="OverTime" name="OverTime">
+                <label for="OverTime" class="toggle__track"><span class="toggle__thumb"></span></label>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Compensation &amp; history</legend>
+          <div class="field-grid">
+            <div class="field">
+              <label for="MonthlyIncome">Monthly income</label>
+              <input type="number" id="MonthlyIncome" name="MonthlyIncome" min="0" step="1" required>
+            </div>
+            <div class="field">
+              <label for="StockOptionLevel">Stock option level</label>
+              <select id="StockOptionLevel" name="StockOptionLevel" required>
+                <option value="" disabled selected>Select a level</option>
+                <option value="0">0 — None</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3 — Highest</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="NumCompaniesWorked">Companies worked previously</label>
+              <input type="number" id="NumCompaniesWorked" name="NumCompaniesWorked" min="0" step="1" required>
+            </div>
+            <div class="field">
+              <label for="TotalWorkingYears">Total working years</label>
+              <input type="number" id="TotalWorkingYears" name="TotalWorkingYears" min="0" step="1" required>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Tenure at this company</legend>
+          <div class="field-grid">
+            <div class="field">
+              <label for="YearsAtCompany">Years at company</label>
+              <input type="number" id="YearsAtCompany" name="YearsAtCompany" min="0" step="1" required>
+            </div>
+            <div class="field">
+              <label for="YearsInCurrentRole">Years in current role</label>
+              <input type="number" id="YearsInCurrentRole" name="YearsInCurrentRole" min="0" step="1" required>
+            </div>
+            <div class="field">
+              <label for="YearsSinceLastPromotion">Years since last promotion</label>
+              <input type="number" id="YearsSinceLastPromotion" name="YearsSinceLastPromotion" min="0" step="1" required>
+            </div>
+            <div class="field">
+              <label for="YearsWithCurrManager">Years with current manager</label>
+              <input type="number" id="YearsWithCurrManager" name="YearsWithCurrManager" min="0" step="1" required>
+            </div>
+            <div class="field">
+              <label for="TrainingTimesLastYear">Trainings attended last year</label>
+              <input type="number" id="TrainingTimesLastYear" name="TrainingTimesLastYear" min="0" step="1" required>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Engagement &amp; satisfaction</legend>
+          <div class="field-grid">
+
+            <div class="field">
+              <label for="JobSatisfaction">Job satisfaction</label>
+              <select id="JobSatisfaction" name="JobSatisfaction" required>
+                <option value="" disabled selected>Select a level</option>
+                <option value="1">1 — Low</option>
+                <option value="2">2 — Medium</option>
+                <option value="3">3 — High</option>
+                <option value="4">4 — Very high</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="EnvironmentSatisfaction">Environment satisfaction</label>
+              <select id="EnvironmentSatisfaction" name="EnvironmentSatisfaction" required>
+                <option value="" disabled selected>Select a level</option>
+                <option value="1">1 — Low</option>
+                <option value="2">2 — Medium</option>
+                <option value="3">3 — High</option>
+                <option value="4">4 — Very high</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="WorkLifeBalance">Work-life balance</label>
+              <select id="WorkLifeBalance" name="WorkLifeBalance" required>
+                <option value="" disabled selected>Select a level</option>
+                <option value="1">1 — Poor</option>
+                <option value="2">2 — Fair</option>
+                <option value="3">3 — Good</option>
+                <option value="4">4 — Excellent</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="JobInvolvement">Job involvement</label>
+              <select id="JobInvolvement" name="JobInvolvement" required>
+                <option value="" disabled selected>Select a level</option>
+                <option value="1">1 — Low</option>
+                <option value="2">2 — Medium</option>
+                <option value="3">3 — High</option>
+                <option value="4">4 — Very high</option>
+              </select>
+            </div>
+
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn--primary" id="submit-btn">Assess risk</button>
+          <button type="reset" class="btn btn--ghost">Clear form</button>
+        </div>
+
+        <p class="form-status" id="form-status" role="status"></p>
+      </form>
+
+      <aside class="result-panel glass-panel" id="result-panel" aria-live="polite">
+        <div class="result-panel__empty" id="result-empty">
+          <div class="result-orb result-orb--idle"></div>
+          <h3>Attrition Risk Results</h3>
+          
+        </div>
+        
+        <div class="result-panel__filled" id="result-filled" hidden>
+          <div class="gauge-orb gauge-orb--result" id="result-gauge">
+            <svg viewBox="0 0 240 240" class="gauge-orb__ring">
+              <circle cx="120" cy="120" r="100" class="gauge-orb__track"></circle>
+              <circle cx="120" cy="120" r="100" class="gauge-orb__progress" id="gauge-progress"></circle>
+            </svg>
+            <div class="gauge-orb__core">
+              <span class="gauge-orb__pct" id="result-pct">--%</span>
+              <span class="gauge-orb__label" id="result-tier">risk</span>
+            </div>
+            <div class="gauge-orb__sheen"></div>
+          </div>
+          <p class="result-note" id="result-note"></p>
+        </div>
+        
+      </aside>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Internal workforce analytics tool · For HR decision support, not sole determination.</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
