@@ -64,7 +64,6 @@ This project uses the **IBM HR Analytics Employee Attrition Dataset**, which con
 Employee-Attrition-Prediction/
 │
 ├── app.py
-├── requirements.txt
 ├── README.md
 │
 ├── model/
