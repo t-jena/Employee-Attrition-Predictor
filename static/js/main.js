@@ -1,6 +1,4 @@
-// Retain — assessment page interactivity
-
-const RING_CIRCUMFERENCE = 2 * Math.PI * 100; // r=100 in the SVG
+const RING_CIRCUMFERENCE = 2 * Math.PI * 100; 
 
 function setGauge(gaugeEl, percentage, tier) {
   const progress = gaugeEl.querySelector(".gauge-orb__progress");
@@ -25,7 +23,7 @@ function tierMessage(tier) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("assessment-form");
-  if (!form) return; // not on the assessment page
+  if (!form) return; 
 
   const submitBtn = document.getElementById("submit-btn");
   const statusEl = document.getElementById("form-status");
@@ -48,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     for (const [key, value] of formData.entries()) {
       payload[key] = value;
     }
-    // checkbox isn't included by FormData when unchecked
+
     payload.OverTime = form.elements.OverTime.checked ? "Yes" : "No";
 
     submitBtn.disabled = true;
