@@ -67,8 +67,7 @@ Employee-Attrition-Prediction/
 ├── README.md
 │
 ├── model/
-│   ├── attrition_pipeline.pkl
-│   └── train_model.py
+│   └── attrition_model.pkl
 │
 ├── static/
 │   ├── css/
