@@ -70,9 +70,11 @@ Employee-Attrition-Prediction/
 │   └── attrition_model.pkl
 │
 ├── static/
-│   ├── css/
+│   ├── css/style.css
 │   └── js/
-│    
+│       ├── charts.js
+|       └── main.js
+| 
 ├── templates/
 │   ├── index.html
 │   └── assessment.html
